@@ -3,6 +3,7 @@
 spl_autoload_register(function ($className) {
 
     $folders = [
+        'repositories',
         'models',
         'config',
         'view',
