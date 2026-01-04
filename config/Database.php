@@ -1,5 +1,7 @@
 <?php
 
+Session::init();
+
 class Database {
     private $host = "localhost";
     private $db_name = "unity_care_clinic";
