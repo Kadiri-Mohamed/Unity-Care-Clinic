@@ -1,0 +1,194 @@
+@import url();
+
+:root {
+    --primary: #134686;
+    --secondary: #ED3F27;
+    --accent: #FEB21A;
+    --light: #FDF4E3;
+}
+
+body {
+    background-color: var(--light);
+    color: var(--primary);
+}
+
+.navbar,
+.navbar-dark {
+    background-color: var(--primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary);
+}
+
+.card-header {
+    background-color: var(--primary) !important;
+    color: white !important;
+}
+
+.stat-card {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card i {
+    font-size: 3rem;
+    opacity: 0.8;
+}
+
+.card-patients {
+    background: linear-gradient(135deg, var(--primary) 0%, #0d2652 100%);
+}
+
+.card-departments {
+    background: linear-gradient(135deg, var(--secondary) 0%, #c82f1f 100%);
+    color: white;
+}
+
+.card-medecins {
+    background: linear-gradient(135deg, var(--accent) 0%, #ffa500 100%);
+    color: var(--primary);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #0d2652;
+    border-color: #0d2652;
+}
+
+.btn-secondary {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-secondary:hover {
+    background-color: #c82f1f;
+    border-color: #c82f1f;
+}
+
+.btn-warning {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--primary);
+}
+
+.btn-warning:hover {
+    background-color: #ffa500;
+    border-color: #ffa500;
+}
+
+.table-hover tbody tr:hover,
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(19, 70, 134, 0.05);
+}
+
+.table thead {
+    background-color: var(--primary);
+    color: white;
+}
+
+.alert-success {
+    background-color: rgba(254, 178, 26, 0.2);
+    border-color: var(--accent);
+    color: var(--primary);
+}
+
+.alert-danger {
+    background-color: rgba(237, 63, 39, 0.2);
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.form-control,
+.form-select {
+    border-color: var(--primary);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(254, 178, 26, 0.25);
+}
+
+.form-label {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.badge-primary {
+    background-color: var(--primary);
+}
+
+.action-buttons a,
+.action-buttons button {
+    margin: 0 2px;
+}
+
+.page-title {
+    color: var(--primary);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.modal-header {
+    background-color: var(--primary);
+    color: white;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+/* Styles pour le sélecteur de langue */
+.language-selector {
+    max-width: 150px;
+}
+
+.language-selector .form-select-sm {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 0.875rem;
+}
+
+.language-selector .form-select-sm:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(254, 178, 26, 0.25);
+}
+
+.language-selector .form-select-sm option {
+    color: var(--primary);
+    background-color: white;
+}
+
+@media (max-width: 768px) {
+    .language-selector {
+        max-width: 120px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+}
