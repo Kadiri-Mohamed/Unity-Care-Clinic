@@ -38,6 +38,11 @@ class Validator {
     public static function alpha($value) {
         return preg_match('/^[a-zA-Z\s\-]+$/', $value);
     }
+
+    public static function minLength($value, int $min): bool
+    {
+        return strlen($value) >= $min;
+    }
     
     public static function alphanumeric($value) {
         return preg_match('/^[a-zA-Z0-9\s\-\.,]+$/', $value);
