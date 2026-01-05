@@ -24,6 +24,15 @@ class UserRepository implements BaseReposetry
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getByEmail($email)
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM users WHERE email = ?"
+        );
+        $stmt->execute([$email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function create($data)
     {
         $stmt = $this->conn->prepare(
