@@ -21,6 +21,7 @@ class AuthService
             return false;
         }
 
+        Session::regenerate();
         Session::set('user', $user);
         Session::set('logged_in', true);
         Session::set('user_role' , $user['role']);

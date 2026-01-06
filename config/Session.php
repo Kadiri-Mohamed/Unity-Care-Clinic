@@ -5,6 +5,11 @@ class Session {
             session_start();
         }
     }
+
+    public static function regenerate(): void
+    {
+        session_regenerate_id(true);  
+    }
     
     public static function set($key, $value) {
         $_SESSION[$key] = $value;
@@ -27,6 +32,9 @@ class Session {
     }
     
     public static function destroy() {
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_role']);
+        unset($_SESSION['logged_in']);
         session_destroy();
     }
     
