@@ -15,6 +15,7 @@ spl_autoload_register(function ($className) {
         'config',
         'view',
         'utils',
+        'auth',
     ];
 
     foreach ($folders as $folder) {
