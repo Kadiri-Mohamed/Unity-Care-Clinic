@@ -1,5 +1,5 @@
 <?php
-
+require_once '../autoload.php';
 class AuthService
 {
     private UserRepository $userRepository;
@@ -20,12 +20,12 @@ class AuthService
         if (!password_verify($password, $user['password'])) {
             return false;
         }
-
+        
+        Session::init();
         Session::regenerate();
         Session::set('user', $user);
-        Session::set('user_log_id', );
         Session::set('logged_in', true);
-        Session::set('user_role' , $user['role']);
+        Session::set('user_role', $user['role']);
         return true;
     }
 }

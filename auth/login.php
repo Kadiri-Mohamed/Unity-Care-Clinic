@@ -1,11 +1,18 @@
 <?php
 require_once '../autoload.php';
 $error = '';
+Session::init();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $authService = new AuthService();
 
     if ($authService->login($_POST['email'], $_POST['password'])) {
-        header('Location: ../index.php');
+        $routes = [
+            'Admin' => 'admin',
+            'Doctor' => 'doctor',
+            'Patient' => 'patient'
+        ];
+
+        header('Location: ../routes/router.php?route=' . $routes[$_SESSION['user_role']]);
         exit;
     }
 
