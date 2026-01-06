@@ -1,6 +1,6 @@
 <?php
 require_once '../autoload.php';
-
+Session::init();
 $user = Session::get('user');
 
 $route = $_GET['route'] ;
@@ -9,35 +9,35 @@ $route = $_GET['route'] ;
 switch ($route) {
 
     case 'login':
-        require '../auth/login.php';
+        echo "<script>location.href = '../auth/login.php';</script>";
         break;
 
     case 'logout':
-        require 'auth/logout.php';
+        echo "<script>location.href = '../auth/login.php';</script>";
         break;
 
-    case 'admin.dashboard':
+    case 'admin':
         if (!$user || $user['role'] !== 'Admin') {
-            header('Location: index.php?route=login');
+            header('Location: ../index.php?route=login');
             exit;
         }
-        require 'view/admin/dashboard.php';
+        require '../view/admin/dashboard.php';
         break;
 
-    case 'doctor.dashboard':
+    case 'doctor':
         if (!$user || $user['role'] !== 'Doctor') {
-            header('Location: index.php?route=login');
+            header('Location: ../index.php?route=login');
             exit;
         }
-        require 'view/doctor/dashboard.php';
+        require '../view/doctor/dashboard.php';
         break;
 
-    case 'patient.dashboard':
+    case 'patient':
         if (!$user || $user['role'] !== 'Patient') {
-            header('Location: index.php?route=login');
+            header('Location: ../index.php?route=login');
             exit;
         }
-        require 'view/patient/dashboard.php';
+        require '../view/patient/dashboard.php';
         break;
 
     default:
