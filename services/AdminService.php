@@ -6,6 +6,7 @@ class AdminService
     private DoctorRepository $doctorRepo;
     private PatientRepository $patientRepo;
     private AppointmentRepository $appointmentRepo;
+    private MedicationRepository $medicationRepo;
 
     public function __construct()
     {
@@ -13,6 +14,7 @@ class AdminService
         $this->doctorRepo = new DoctorRepository();
         $this->patientRepo = new PatientRepository();
         $this->appointmentRepo = new AppointmentRepository();
+        $this->medicationRepo = new MedicationRepository();
     }
 
     public function getStatistics(): array
@@ -254,5 +256,103 @@ class AdminService
         } catch (Exception $e) {
             return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
         }
+    }
+
+    // ==================== Medication Management ====================
+
+    public function getAllMedications(): array
+    {
+        $sql = "
+            SELECT 
+                m.id,
+                m.nom,
+                m.dosage,
+                m.prescription_id,
+                CONCAT(pd.nom, ' ', pd.prenom) as patient_name,
+                CONCAT(dd.nom, ' ', dd.prenom) as doctor_name,
+                p.date_prescription
+            FROM medications m
+            LEFT JOIN prescriptions p ON m.prescription_id = p.id
+            LEFT JOIN patients pat ON p.id = pat.id
+            LEFT JOIN users pd ON pat.id = pd.id
+            LEFT JOIN doctors doc ON p.id = doc.id
+            LEFT JOIN users dd ON doc.id = dd.id
+            ORDER BY m.id DESC
+        ";
+
+        $database = new Database();
+        $conn = $database->dbConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMedicationById(int $id): ?array
+    {
+        return $this->medicationRepo->getById($id);
+    }
+
+    public function createMedication(array $data): array
+    {
+        try {
+            $medicationData = [
+                'prescription_id' => $data['prescription_id'],
+                'nom' => $data['nom'],
+                'dosage' => $data['dosage']
+            ];
+
+            $this->medicationRepo->create($medicationData);
+            return ['success' => true, 'message' => 'Medication created successfully'];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
+        }
+    }
+
+    public function updateMedication(int $id, array $data): array
+    {
+        try {
+            $medicationData = [
+                'nom' => $data['nom'],
+                'dosage' => $data['dosage']
+            ];
+
+            $this->medicationRepo->update($id, $medicationData);
+            return ['success' => true, 'message' => 'Medication updated successfully'];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
+        }
+    }
+
+    public function deleteMedication(int $id): array
+    {
+        try {
+            $this->medicationRepo->delete($id);
+            return ['success' => true, 'message' => 'Medication deleted successfully'];
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
+        }
+    }
+
+    public function getAllPrescriptions(): array
+    {
+        $sql = "
+            SELECT 
+                p.id,
+                p.date_prescription,
+                CONCAT(pd.nom, ' ', pd.prenom) as patient_name,
+                CONCAT(dd.nom, ' ', dd.prenom) as doctor_name
+            FROM prescriptions p
+            INNER JOIN patients pat ON p.id = pat.id
+            INNER JOIN users pd ON pat.id = pd.id
+            INNER JOIN doctors doc ON p.id = doc.id
+            INNER JOIN users dd ON doc.id = dd.id
+            ORDER BY p.date_prescription DESC
+        ";
+
+        $database = new Database();
+        $conn = $database->dbConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

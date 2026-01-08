@@ -7,7 +7,7 @@ $user = Session::get('user');
 $route = $_GET['route'] ?? null;
 
 // If no route parameter but we have other admin parameters, set route to 'admin'
-if (!$route && (isset($_GET['doctors']) || isset($_GET['patients']) || isset($_GET['appointments']) || isset($_GET['dashboard']))) {
+if (!$route && (isset($_GET['doctors']) || isset($_GET['patients']) || isset($_GET['appointments']) || isset($_GET['medications']) || isset($_GET['dashboard']))) {
     $route = 'admin';
 }
 
