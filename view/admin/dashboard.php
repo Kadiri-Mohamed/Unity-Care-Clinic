@@ -1,7 +1,4 @@
 <?php
-require_once '../config/Session.php';
-require_once '../services/AdminService.php';
-
 Session::init();
 if (!Session::isLoggedIn() || Session::getUserRole() !== 'Admin') {
     header('Location: ../auth/login.php');
@@ -14,6 +11,7 @@ $appointments = $adminService->getAllAppointments();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,87 +29,91 @@ $appointments = $adminService->getAllAppointments();
             left: 0;
             top: 0;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .main-content {
             margin-left: 250px;
             padding: 20px;
         }
-        
+
         .navbar {
             background-color: white !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 999;
         }
-        
+
         .sidebar .nav-link {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             padding: 12px 20px;
             border-left: 4px solid transparent;
             transition: all 0.3s;
         }
-        
+
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
             color: white;
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border-left-color: var(--accent);
         }
-        
+
         .sidebar .nav-link i {
             width: 24px;
             margin-right: 10px;
         }
-        
+
         .stat-card {
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 20px;
             color: white;
             transition: transform 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .stat-icon {
             font-size: 2.5rem;
             opacity: 0.9;
             margin-bottom: 15px;
         }
-        
+
         .stat-number {
             font-size: 2.2rem;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .stat-label {
             font-size: 0.9rem;
             opacity: 0.9;
         }
-        
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 70px;
             }
+
             .sidebar .nav-link span {
                 display: none;
             }
+
             .sidebar .nav-link i {
                 margin-right: 0;
             }
+
             .main-content {
                 margin-left: 70px;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column">
@@ -121,23 +123,27 @@ $appointments = $adminService->getAllAppointments();
                 <span class="d-none d-md-inline">UCC Admin</span>
             </h4>
         </div>
-        
+
         <nav class="nav flex-column mt-3">
-            <a href="?dashboard" class="nav-link active">
+            <a href="../routes/router.php?route=admin" class="nav-link active">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="?doctors" class="nav-link">
+            <a href="../routes/router.php?route=admin&doctors" class="nav-link">
                 <i class="fas fa-user-md"></i>
                 <span>Médecins</span>
             </a>
-            <a href="?patients" class="nav-link">
+            <a href="../routes/router.php?route=admin&patients" class="nav-link">
                 <i class="fas fa-users"></i>
                 <span>Patients</span>
             </a>
-            <a href="?appointments" class="nav-link">
+            <a href="../routes/router.php?route=admin&appointments" class="nav-link">
                 <i class="fas fa-calendar-check"></i>
                 <span>Rendez-vous</span>
+            </a>
+            <a href="../routes/router.php?route=admin&medications" class="nav-link">
+                <i class="fas fa-pills"></i>
+                <span>Médicaments</span>
             </a>
             <a href="../auth/logout.php" class="nav-link text-danger mt-5">
                 <i class="fas fa-sign-out-alt"></i>
@@ -157,7 +163,7 @@ $appointments = $adminService->getAllAppointments();
                 <div class="d-flex align-items-center">
                     <span class="me-3 text-muted">
                         <i class="fas fa-user-circle me-2"></i>
-                        <?= htmlspecialchars($_SESSION['user']['nom'] . " " . $_SESSION['user']['prenom'] ?? 'Admin') ?>
+                        <?= htmlspecialchars($_SESSION['user']['nom'] . " " . $_SESSION['user']['prenom']) ?>
                     </span>
                     <div class="language-selector">
                         <select class="form-select form-select-sm">
@@ -198,7 +204,7 @@ $appointments = $adminService->getAllAppointments();
         <div class="card">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Rendez-vous Récents</h5>
-                <a href="?appointments" class="btn btn-sm btn-light">Voir tous</a>
+                <a href="../routes/router.php?route=admin&appointments" class="btn btn-sm btn-light">Voir tous</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -216,37 +222,46 @@ $appointments = $adminService->getAllAppointments();
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach(array_slice($appointments, 0, 5) as $appointment): ?>
-                            <tr>
-                                <td>#<?= $appointment['id'] ?></td>
-                                <td><?= date('d/m/Y', strtotime($appointment['date_rdv'])) ?></td>
-                                <td><?= $appointment['heure'] ?></td>
-                                <td><?= htmlspecialchars($appointment['patient_name']) ?></td>
-                                <td><?= htmlspecialchars($appointment['doctor_name']) ?></td>
-                                <td><?= htmlspecialchars($appointment['specialite']) ?></td>
-                                <td>
-                                    <?php
-                                    $statusClass = [
-                                        'pending' => 'warning',
-                                        'confirmed' => 'success',
-                                        'cancelled' => 'danger',
-                                        'completed' => 'info'
-                                    ][$appointment['status']] ?? 'secondary';
-                                    ?>
-                                    <span class="badge bg-<?= $statusClass ?>">
-                                        <?= ucfirst($appointment['status']) ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" title="Voir">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-danger" title="Supprimer">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                            <?php if (!empty($appointments)): ?>
+                                <?php foreach (array_slice($appointments, 0, 5) as $appointment): ?>
+                                    <tr>
+                                        <td>#<?= $appointment['id'] ?></td>
+                                        <td><?= date('d/m/Y', strtotime($appointment['date_rdv'])) ?></td>
+                                        <td><?= $appointment['heure'] ?></td>
+                                        <td><?= htmlspecialchars($appointment['patient_name']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['doctor_name']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['specialite']) ?></td>
+                                        <td>
+                                            <?php
+                                            $statusClass = [
+                                                'pending' => 'warning',
+                                                'confirmed' => 'success',
+                                                'cancelled' => 'danger',
+                                                'completed' => 'info'
+                                            ][$appointment['status']] ?? 'secondary';
+                                            ?>
+                                            <span class="badge bg-<?= $statusClass ?>">
+                                                <?= ucfirst($appointment['status']) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" title="Voir">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="fas fa-calendar-alt fa-2x text-muted mb-3"></i>
+                                        <p class="text-muted">Aucun rendez-vous trouvé</p>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -263,20 +278,22 @@ $appointments = $adminService->getAllAppointments();
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <a href="?add-doctor" class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3">
+                                <a href="../routes/router.php?route=admin&doctors"
+                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-3">
                                     <i class="fas fa-user-md fa-2x me-3"></i>
                                     <div>
-                                        <div class="fw-bold">Ajouter Médecin</div>
-                                        <small>Nouveau personnel</small>
+                                        <div class="fw-bold">Gérer Médecins</div>
+                                        <small>Ajouter, modifier</small>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-md-6">
-                                <a href="?add-patient" class="btn btn-success w-100 d-flex align-items-center justify-content-center py-3">
+                                <a href="../routes/router.php?route=admin&patients"
+                                    class="btn btn-success w-100 d-flex align-items-center justify-content-center py-3">
                                     <i class="fas fa-user-plus fa-2x me-3"></i>
                                     <div>
-                                        <div class="fw-bold">Ajouter Patient</div>
-                                        <small>Nouveau patient</small>
+                                        <div class="fw-bold">Gérer Patients</div>
+                                        <small>Ajouter, modifier</small>
                                     </div>
                                 </a>
                             </div>
@@ -310,23 +327,41 @@ $appointments = $adminService->getAllAppointments();
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-light border-top py-3 mt-4" style="margin-left: 250px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-hospital text-primary me-2"></i>
+                        <strong>Unity Care Clinic</strong> - Système de gestion médicale
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-copyright me-1"></i> <?= date('Y') ?> Tous droits réservés
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Language switcher
-        document.querySelector('.language-selector select').addEventListener('change', function() {
-            alert('Language changed to: ' + this.value);
-            // You would typically make an AJAX call here to change language
+        document.querySelector('.language-selector select').addEventListener('change', function () {
+            alert('Langue changée en: ' + this.value);
         });
 
         // Update time
         function updateTime() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('fr-FR');
-            const dateStr = now.toLocaleDateString('fr-FR', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            const dateStr = now.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             });
             document.querySelector('.navbar-brand').innerHTML = `
                 <h5 class="mb-0 text-primary">Dashboard Admin</h5>
@@ -337,4 +372,5 @@ $appointments = $adminService->getAllAppointments();
         updateTime();
     </script>
 </body>
+
 </html>
