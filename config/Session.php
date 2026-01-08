@@ -20,7 +20,7 @@ class Session {
     }
     
     public static function isLoggedIn() {
-        return isset($_SESSION['user_id']);
+        return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
     
     public static function getUserRole() {
