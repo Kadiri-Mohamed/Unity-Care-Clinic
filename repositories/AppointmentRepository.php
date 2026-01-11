@@ -68,4 +68,27 @@ class AppointmentRepository implements BaseReposetry
         $stmt->execute();
         return $stmt->fetchColumn();
     }
+    public function findByDoctorId($doctorId)
+{
+    $sql = "SELECT * FROM appointments WHERE doctor_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$doctorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function findByIdAndDoctor($id, $doctorId)
+{
+    $sql = "SELECT * FROM appointments WHERE id = ? AND doctor_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$id, $doctorId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function updateStatusByDoctor($id, $status, $doctorId)
+{
+    $sql = "UPDATE appointments SET status = ? WHERE id = ? AND doctor_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([$status, $id, $doctorId]);
+}
+
 }

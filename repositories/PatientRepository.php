@@ -88,4 +88,31 @@ class PatientRepository implements BaseReposetry
             ->query("SELECT COUNT(*) FROM patients")
             ->fetchColumn();
     }
+
+    public function findPatientsByDoctor($doctorId)
+    {
+        $sql = "
+        SELECT DISTINCT p.*
+        FROM patients p
+        JOIN appointments a ON a.patient_id = p.id
+        WHERE a.doctor_id = ?
+    ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$doctorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findPatientByIdAndDoctor($id, $doctorId)
+    {
+        $sql = "
+        SELECT DISTINCT p.*
+        FROM patients p
+        JOIN appointments a ON a.patient_id = p.id
+        WHERE p.id = ? AND a.doctor_id = ?
+    ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id, $doctorId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 }

@@ -86,4 +86,44 @@ class DoctorRepository implements BaseReposetry
             ->query("SELECT COUNT(*) FROM doctors")
             ->fetchColumn();
     }
+    public function countTodayAppointments($doctorId)
+{
+    $sql = "SELECT COUNT(*) FROM appointments 
+            WHERE doctor_id = ? AND DATE(appointment_date) = CURDATE()";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$doctorId]);
+    return $stmt->fetchColumn();
+}
+
+public function countPatients($doctorId)
+{
+    $sql = "
+        SELECT COUNT(DISTINCT patient_id)
+        FROM appointments
+        WHERE doctor_id = ?
+    ";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$doctorId]);
+    return $stmt->fetchColumn();
+}
+
+public function countAppointments($doctorId)
+{
+    $sql = "SELECT COUNT(*) FROM appointments WHERE doctor_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$doctorId]);
+    return $stmt->fetchColumn();
+}
+
+public function updateProfile($doctorId, $data)
+{
+    $sql = "UPDATE doctors SET phone = ?, specialty = ? WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    return $stmt->execute([
+        $data['phone'],
+        $data['specialty'],
+        $doctorId
+    ]);
+}
+
 }
