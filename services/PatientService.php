@@ -47,4 +47,15 @@ class PatientService
         $this->patientRepo->delete($id);
         return (new UserRepository())->delete($id);
     }
+
+    public function getPatientsByDoctor($doctorId)
+{
+    return $this->patientRepo->findPatientsByDoctor($doctorId);
+}
+
+public function getPatientByIdAndDoctor($id, $doctorId)
+{
+    return $this->patientRepo->findPatientByIdAndDoctor($id, $doctorId);
+}
+
 }

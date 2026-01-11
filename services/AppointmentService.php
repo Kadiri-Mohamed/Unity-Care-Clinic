@@ -21,4 +21,20 @@ class AppointmentService
 
         return $this->appointmentRepository->create($data);
     }
+
+    public function getAppointmentsByDoctor($doctorId)
+    {
+        return $this->appointmentRepository->findByDoctorId($doctorId);
+    }
+
+    public function getAppointmentByIdAndDoctor($id, $doctorId)
+    {
+        return $this->appointmentRepository->findByIdAndDoctor($id, $doctorId);
+    }
+
+    public function updateStatusByDoctor($id, $status, $doctorId)
+    {
+        return $this->appointmentRepository->updateStatusByDoctor($id, $status, $doctorId);
+    }
+
 }

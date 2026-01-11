@@ -47,4 +47,24 @@ class DoctorService
         $this->doctorRepo->delete($id);
         return (new UserRepository())->delete($id);
     }
+
+    public function getDashboardStats($doctorId)
+    {
+        return [
+            'appointments_today' => $this->doctorRepo->countTodayAppointments($doctorId),
+            'total_patients' => $this->doctorRepo->countPatients($doctorId),
+            'total_appointments' => $this->doctorRepo->countAppointments($doctorId),
+        ];
+    }
+
+    public function getDoctorById($doctorId)
+    {
+        return $this->doctorRepo->getById($doctorId);
+    }
+
+    public function updateProfile($doctorId, $data)
+    {
+        return $this->doctorRepo->updateProfile($doctorId, $data);
+    }
+
 }
